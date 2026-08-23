@@ -357,6 +357,7 @@ document.getElementById('retakeBtn').addEventListener('click', () => {
   quizEl.classList.remove('hidden');
   renderQuestion();
 });
+deploy.sh
 
 renderQuestion();
 </script>
