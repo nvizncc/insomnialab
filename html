@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insomnia Lab — What Kind of 3AM Thought Are You?</title>
+<meta name="description" content="You know the one. The thought that shows up right when you're about to fall asleep. Take the quiz and find out which one is yours.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --panel: #f5f5f7;
+    --ink: #1d1d1f;
+    --ink-soft: #6e6e73;
+    --accent: #0071e3;
+    --accent-hover: #0077ed;
+    --border: #d2d2d7;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 64px 24px 90px; }
+
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: clamp(34px, 6vw, 48px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    text-align: center;
+    margin: 0 0 14px;
+  }
+  .sub {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 17px;
+    line-height: 1.5;
+    max-width: 440px;
+    margin: 0 auto 44px;
+  }
+
+  .ad-slot {
+    max-width: 560px;
+    margin: 0 auto 36px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--panel);
+  }
+
+  .progress-wrap {
+    max-width: 560px;
+    margin: 0 auto 28px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .card {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 40px 36px;
+    margin: 0 auto 28px;
+    max-width: 560px;
+  }
+
+  .q-tag {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .q-text {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    margin: 0 0 26px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    text-align: left;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .opt:hover { border-color: var(--accent); background: #fbfdff; }
+  .opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .opt.chosen { border-color: var(--accent); background: #f0f7ff; }
+
+  .cta-btn {
+    display: block;
+    margin: 0 auto;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 13px 32px;
+    border-radius: 980px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .cta-btn:hover { background: var(--accent-hover); }
+  .cta-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  .hidden { display: none; }
+
+  .result-emoji { font-size: 48px; text-align: center; margin-bottom: 10px; }
+  .result-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-align: center;
+    margin: 0 0 12px;
+  }
+  .result-desc { font-size: 16px; line-height: 1.6; text-align: center; color: var(--ink-soft); margin: 0 0 30px; }
+
+  .share-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .share-btn {
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 980px;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+  .share-btn:hover { border-color: var(--accent); }
+  .share-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  footer { text-align: center; font-size: 12px; color: var(--ink-soft); margin-top: 44px; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="eyebrow">Insomnia Lab</div>
+  <h1>What Kind of 3AM<br>Thought Are You?</h1>
+  <p class="sub">You know the one. It shows up right when you're finally about to fall asleep. Answer six questions and we'll diagnose yours.</p>
+
+  <div class="ad-slot" id="ad-top"><!-- AdSense ad unit: top banner --> Ad slot — top banner</div>
+
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <div id="quiz"></div>
+
+  <div id="resultView" class="hidden">
+    <div class="card" id="resultCard" style="max-width:560px;">
+      <div class="result-emoji" id="resultEmoji"></div>
+      <div class="result-title" id="resultTitle"></div>
+      <p class="result-desc" id="resultDesc"></p>
+      <div class="share-row">
+        <button class="share-btn" id="shareBtn">Copy result to share</button>
+        <button class="share-btn" id="retakeBtn">Take it again</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot" id="ad-bottom"><!-- AdSense ad unit: bottom rectangle --> Ad slot — bottom rectangle</div>
+
+  <footer>Insomnia Lab — not actually science. Just vibes.</footer>
+</div>
+
+<script>
+const questions = [
+  {
+    tag: "Question 1 of 6",
+    text: "It's 2:58 AM. Your eyes are closed. What's the first thing that shows up uninvited?",
+    options: [
+      { text: "A conversation from 2014 that still doesn't sit right", type: "rewind" },
+      { text: "Everything that could go wrong tomorrow, ranked by severity", type: "doom" },
+      { text: "An idea so good you're sure you'll remember it", type: "genius" },
+      { text: "Whether you actually locked the car", type: "logistics" },
+    ]
+  },
+  {
+    tag: "Question 2 of 6",
+    text: "Your phone is face-down and you PROMISED yourself you wouldn't check it. You check it.",
+    options: [
+      { text: "To reread a text you already reread four times", type: "rewind" },
+      { text: "To Google a symptom you definitely don't have", type: "doom" },
+      { text: "To write your idea in the Notes app before it evaporates", type: "genius" },
+      { text: "To check tomorrow's weather, calendar, and the group chat, in that order", type: "logistics" },
+    ]
+  },
+  {
+    tag: "Question 3 of 6",
+    text: "Pick the thought that has personally cost you the most sleep this year:",
+    options: [
+      { text: "\"Did that joke land or did everyone just feel bad for me\"", type: "rewind" },
+      { text: "\"What if I lose my job / my keys / my mind, in that order\"", type: "doom" },
+      { text: "\"I should start a business selling exactly this\"", type: "genius" },
+      { text: "\"I need to reorganize the entire pantry system\"", type: "logistics" },
+    ]
+  },
+  {
+    tag: "Question 4 of 6",
+    text: "A friend texts \"you up?\" at 3AM. Be honest, what are you actually doing?",
+    options: [
+      { text: "Mentally drafting an apology for something from 2019", type: "rewind" },
+      { text: "Spiraling about a deadline that is, checks clock, already today", type: "doom" },
+      { text: "Voice-memoing myself a genuinely unhinged business plan", type: "genius" },
+      { text: "Making a packing list for a trip that isn't booked yet", type: "logistics" },
+    ]
+  },
+  {
+    tag: "Question 5 of 6",
+    text: "In the morning, what's left of last night's thought?",
+    options: [
+      { text: "A very specific cringe I will carry to my grave", type: "rewind" },
+      { text: "A vague sense of dread I can no longer explain", type: "doom" },
+      { text: "A voice memo I am afraid to listen back to", type: "genius" },
+      { text: "A to-do list with 11 new items, none urgent", type: "logistics" },
+    ]
+  },
+  {
+    tag: "Question 6 of 6",
+    text: "Last one. Pick the caption that best fits your brain at 3AM:",
+    options: [
+      { text: "\"Let's replay every social interaction since 2009\"", type: "rewind" },
+      { text: "\"What if, hear me out, everything goes wrong\"", type: "doom" },
+      { text: "\"I have cracked the code and no one else knows yet\"", type: "genius" },
+      { text: "\"We should really refinance / reorganize / replan something\"", type: "logistics" },
+    ]
+  },
+];
+
+const results = {
+  rewind: {
+    emoji: "🔁",
+    title: "The Old Cringe Rewind",
+    desc: "Your brain has a director's cut of every mildly awkward thing you've ever done, and 3AM is premiere night. Nobody else remembers that thing. Truly. Not one person."
+  },
+  doom: {
+    emoji: "🌩️",
+    title: "The Doom Spiral",
+    desc: "You don't just think of one bad outcome, you think of the full flowchart. Impressive, honestly. Terrible for sleep, but impressive."
+  },
+  genius: {
+    emoji: "💡",
+    title: "The Random Genius Idea",
+    desc: "Somewhere between REM cycles, you invent something brilliant. By breakfast it's either gone forever or it was a business plan for selling ice to penguins."
+  },
+  logistics: {
+    emoji: "🗂️",
+    title: "The Logistics Brain",
+    desc: "Your body wants to sleep, your brain wants to reorganize the garage. Nothing is urgent. Everything gets planned anyway."
+  }
+};
+
+let current = 0;
+const answers = [];
+const quizEl = document.getElementById('quiz');
+const progressBar = document.getElementById('progressBar');
+
+function renderQuestion() {
+  const q = questions[current];
+  quizEl.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="q-tag">${q.tag}</div>
+    <div class="q-text">${q.text}</div>
+    <div class="options">
+      ${q.options.map((opt, i) => `<button class="opt" data-type="${opt.type}" data-idx="${i}">${opt.text}</button>`).join('')}
+    </div>
+  `;
+  quizEl.appendChild(card);
+  progressBar.style.width = `${(current / questions.length) * 100}%`;
+
+  card.querySelectorAll('.opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      answers.push(btn.dataset.type);
+      current++;
+      if (current < questions.length) {
+        renderQuestion();
+      } else {
+        progressBar.style.width = '100%';
+        showResult();
+      }
+    });
+  });
+}
+
+function showResult() {
+  const counts = {};
+  answers.forEach(t => counts[t] = (counts[t] || 0) + 1);
+  const winner = Object.keys(counts).reduce((a, b) => counts[a] >= counts[b] ? a : b);
+  const r = results[winner];
+
+  quizEl.classList.add('hidden');
+  document.getElementById('resultView').classList.remove('hidden');
+  document.getElementById('resultEmoji').textContent = r.emoji;
+  document.getElementById('resultTitle').textContent = r.title;
+  document.getElementById('resultDesc').textContent = r.desc;
+
+  document.getElementById('shareBtn').onclick = () => {
+    const shareText = `I took the 3AM Thought quiz and I'm apparently ${r.title} ${r.emoji}. Find out yours:`;
+    navigator.clipboard?.writeText(`${shareText} ${window.location.href}`);
+    const btn = document.getElementById('shareBtn');
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = original, 1600);
+  };
+}
+
+document.getElementById('retakeBtn').addEventListener('click', () => {
+  current = 0;
+  answers.length = 0;
+  document.getElementById('resultView').classList.add('hidden');
+  quizEl.classList.remove('hidden');
+  renderQuestion();
+});
+
+renderQuestion();
+</script>
+
+</body>
+</html>
